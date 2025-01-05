@@ -32,9 +32,9 @@ def init_db():
         db.session.add_all([user1, user2, user3])
         db.session.commit()
 
-        book1 = Book(title='Programowanie w Pythonie dla opornych', author='Jan Kowalski', published_date=date(2022, 5, 10), available=True)
-        book2 = Book(title='Flask w 24 godziny: Przewodnik po kawie', author='Maria Nowak', published_date=date(2021, 8, 15), available=True)
-        book3 = Book(title='Jak zostać mistrzem w PHP', author='Zbigniew Lis', published_date=date(2019, 12, 1), available=True)
+        book1 = Book(title='Programowanie w Pythonie dla opornych', author='Jan Kowalski', published_date=date(2022, 5, 10), available=False)
+        book2 = Book(title='Flask w 24 godziny: Przewodnik po kawie', author='Maria Nowak', published_date=date(2021, 8, 15), available=False)
+        book3 = Book(title='Jak zostać mistrzem w PHP', author='Zbigniew Lis', published_date=date(2019, 12, 1), available=False)
         book4 = Book(title='Czysty kod: Bajka o programowaniu', author='Jan Kowalski', published_date=date(2020, 2, 20), available=True)
         book5 = Book(title='Historia nieudanych start-upów', author='Maria Nowak', published_date=date(2023, 3, 18), available=True)
 
