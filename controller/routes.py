@@ -1,9 +1,18 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template
 
 from database.database import Book
 from service.borrowService import borrow_book, return_book, add_book_to_catalog, list_all_books
 
 routes = Blueprint('routes', __name__)
+
+@routes.route('/')
+def home():
+    return render_template('index.html')
+
+@routes.route('/books')
+def books():
+    return render_template('books.html')
+
 
 @routes.route('/books/borrow', methods=['POST'])
 def borrow():
@@ -16,7 +25,7 @@ def return_borrowed_book():
     print(data)
     return jsonify({"message": return_book(data['user_id'], data['book_id'])})
 
-@routes.route('/books', methods=['GET'])
+@routes.route('/books/list', methods=['GET'])
 def get_books():
     books = Book.query.all()
     if not books:
