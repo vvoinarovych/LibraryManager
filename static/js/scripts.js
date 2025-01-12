@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function fetchUndoStack() {
-        const response = await fetch('/books/undo_stack');
+        const response = await fetch('/books/history');
         if (response.ok) {
             const data = await response.json();
             undoStackTable.innerHTML = '';

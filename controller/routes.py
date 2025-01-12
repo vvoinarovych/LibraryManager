@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request, render_template
 
 from database.database import Book
-from service.borrowService import borrow_book, return_book, add_book_to_catalog, list_all_books, waitlist, undo_stack, \
-    get_all_reversed_undo_operations
+from service.borrowService import borrow_book, return_book, add_book_to_catalog, waitlist, \
+    get_all_reversed_history_operations, list_all_books
 
 routes = Blueprint('routes', __name__)
 
@@ -23,27 +23,14 @@ def borrow():
 @routes.route('/books/return', methods=['POST'])
 def return_borrowed_book():
     data = request.json
-    print(data)
     return jsonify({"message": return_book(data['user_id'], data['book_id'])})
 
 @routes.route('/books/list', methods=['GET'])
 def get_books():
-    books = Book.query.all()
+    books = list_all_books()
     if not books:
         return jsonify({"message": "No books found."}), 404
-
-    book_list = []
-    for book in books:
-        book_data = {
-            'id': book.id,
-            'title': book.title,
-            'author': book.author,
-            'published_date': book.published_date,
-            'available': book.available
-        }
-        book_list.append(book_data)
-
-    return jsonify(book_list)
+    return jsonify(books)
 
 @routes.route('/books/add', methods=['POST'])
 def add_book():
@@ -53,10 +40,6 @@ def add_book():
         return jsonify({"message": message})
     return jsonify({"error": "Invalid data"}), 400
 
-@routes.route('/books/list', methods=['GET'])
-def list_books():
-    books = list_all_books()
-    return jsonify({"books": books})
 
 @routes.route('/books/waitlist', methods=['GET'])
 def get_all_waitlists():
@@ -67,8 +50,8 @@ def get_all_waitlists():
         return jsonify({"error": "Failed to process waitlist data"}), 500
     return jsonify(all_waitlists)
 
-@routes.route('/books/undo_stack', methods=['GET'])
+@routes.route('/books/history', methods=['GET'])
 def get_undo_stack():
-    undo_data = get_all_reversed_undo_operations()
+    undo_data = get_all_reversed_history_operations()
     return jsonify({"undo_stack": undo_data})
 

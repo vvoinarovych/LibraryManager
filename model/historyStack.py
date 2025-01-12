@@ -1,4 +1,4 @@
-class UndoStack:
+class HistoryStack:
     def __init__(self):
         self.stack = []
 

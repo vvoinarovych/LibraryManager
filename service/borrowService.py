@@ -1,10 +1,10 @@
 from model.waitlistQueue import WaitlistQueue
-from model.undoStack import UndoStack
+from model.historyStack import HistoryStack
 from database.database import db, Book, User, BorrowRecord
 from datetime import date
 
 waitlist = {}
-undo_stack = UndoStack()
+history_stack = HistoryStack()
 
 
 def add_book_to_catalog(title, author, published_date=None):
@@ -34,13 +34,14 @@ def borrow_book(user_id, book_id):
             book.available = False
             db.session.add(BorrowRecord(user_id=user_id, book_id=book_id, borrow_date=date.today()))
             db.session.commit()
-            undo_stack.push(("return_book", user_id, book_id))
+            history_stack.push(("borrow book", user_id, book_id))
             return f"Book '{book.title}' borrowed successfully!"
         else:
             if book_id not in waitlist:
                 waitlist[book_id] = WaitlistQueue()
             waitlist[book_id].enqueue(user_id)
             print(f"User {user_id} added to the waitlist for book {book_id}.")
+            history_stack.push(("add user to waitlist", user_id, book_id))
             return "Book not available, added to the waitlist."
     return "User or book not found."
 
@@ -54,19 +55,29 @@ def return_book(user_id, book_id):
         borrow.return_date = date.today()
         book.available = True
         db.session.commit()
-        undo_stack.push(("borrow_book", user_id, book_id))
+        history_stack.push(("return book", user_id, book_id))
         return f"Book '{book.title}' returned successfully!"
     return "Borrow record not found or user not found."
 
 
 def list_all_books():
     books = Book.query.all()
-    return [{"book_id": book.id, "title": book.title, "available": book.available} for book in books]
+    book_list = []
+    for book in books:
+        book_data = {
+            'id': book.id,
+            'title': book.title,
+            'author': book.author,
+            'published_date': book.published_date,
+            'available': book.available
+        }
+        book_list.append(book_data)
+    return book_list
 
 
-def get_all_reversed_undo_operations():
+def get_all_reversed_history_operations():
     reversed_operations = []
-    temp_stack = undo_stack.stack.copy()
+    temp_stack = history_stack.stack.copy()
     while temp_stack:
         operation = temp_stack.pop()
         reversed_operations.append(operation)
