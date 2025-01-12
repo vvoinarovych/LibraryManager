@@ -74,19 +74,16 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('.return-btn').forEach(button => {
                 button.addEventListener('click', async (event) => {
                     const bookId = event.target.getAttribute('data-book-id');
-                    const userId = prompt('Enter your user ID:');
-                    if (userId) {
-                        const response = await fetch('/books/return', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ user_id: userId, book_id: bookId }),
-                        });
-                        const data = await response.json();
-                        alert(data.message);
-                        fetchBooks();  // Refresh the books list
-                        fetchWaitlists();
-                        fetchUndoStack();
-                    }
+                    const response = await fetch('/books/return', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ book_id: bookId }),
+                    });
+                    const data = await response.json();
+                    alert(data.message);
+                    fetchBooks();
+                    fetchWaitlists();
+                    fetchUndoStack();
                 });
             });
         } else {

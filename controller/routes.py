@@ -23,7 +23,7 @@ def borrow():
 @routes.route('/books/return', methods=['POST'])
 def return_borrowed_book():
     data = request.json
-    return jsonify({"message": return_book(data['user_id'], data['book_id'])})
+    return jsonify({"message": return_book(data['book_id'])})
 
 @routes.route('/books/list', methods=['GET'])
 def get_books():

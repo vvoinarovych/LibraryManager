@@ -53,19 +53,18 @@ def borrow_book(user_id, book_id):
         return "User or book not found."
 
 
-def return_book(user_id, book_id):
+def return_book(book_id):
     with shared_resource_lock:
-        user = User.query.get(user_id)
-        borrow = BorrowRecord.query.filter_by(user_id=user_id, book_id=book_id).first()
+        borrow = BorrowRecord.query.filter_by(book_id=book_id).filter_by(return_date=None).first()
         book = Book.query.get(book_id)
 
-        if user and borrow and book:
+        if book and borrow:
             borrow.return_date = date.today()
             book.available = True
             db.session.commit()
-            history_stack.push(("return book", user_id, book_id))
+            history_stack.push(("return book", borrow.user_id, book_id))
             return f"Book '{book.title}' returned successfully!"
-        return "Borrow record not found or user not found."
+        return "No active borrow record found for this book."
 
 
 def list_all_books():
