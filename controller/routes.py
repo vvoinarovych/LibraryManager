@@ -1,7 +1,8 @@
 from flask import Blueprint, jsonify, request, render_template
 
 from database.database import Book
-from service.borrowService import borrow_book, return_book, add_book_to_catalog, list_all_books
+from service.borrowService import borrow_book, return_book, add_book_to_catalog, list_all_books, waitlist, undo_stack, \
+    get_all_reversed_undo_operations
 
 routes = Blueprint('routes', __name__)
 
@@ -57,4 +58,17 @@ def list_books():
     books = list_all_books()
     return jsonify({"books": books})
 
+@routes.route('/books/waitlist', methods=['GET'])
+def get_all_waitlists():
+    try:
+        all_waitlists = {key: queue.get_all_for_display() for key, queue in waitlist.items()}
+    except Exception as e:
+        print(f"Error processing waitlist: {e}")
+        return jsonify({"error": "Failed to process waitlist data"}), 500
+    return jsonify(all_waitlists)
+
+@routes.route('/books/undo_stack', methods=['GET'])
+def get_undo_stack():
+    undo_data = get_all_reversed_undo_operations()
+    return jsonify({"undo_stack": undo_data})
 

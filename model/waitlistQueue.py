@@ -15,3 +15,6 @@ class WaitlistQueue:
 
     def is_empty(self):
         return len(self.queue) == 0
+
+    def get_all_for_display(self):
+        return list(self.queue)
