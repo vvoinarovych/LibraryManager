@@ -27,8 +27,10 @@ document.addEventListener('DOMContentLoaded', function () {
         fetchUndoStack();
     });
 
-    async function fetchBooks() {
-        const response = await fetch('/books/list');
+    async function fetchBooks(sortBy = null) {
+        const url = sortBy ? `/books/list?sort_by=${sortBy}` : '/books/list';
+
+        const response = await fetch(url);
         if (response.ok) {
             const books = await response.json();
             booksTable.innerHTML = '';
@@ -44,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         </button>
                     </td>
                     <td>
-                        ${!book.available ? `<button class="return-btn" data-book-id="${book.id}">Return</button>` : ''}
+                        ${!book.available ? `<button class="return-btn" data-book-id="${book.id}">Return</button>` : ''} 
                     </td>
                 </tr>`;
                 booksTable.innerHTML += row;
@@ -81,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         });
                         const data = await response.json();
                         alert(data.message);
-                        fetchBooks();
+                        fetchBooks();  // Refresh the books list
                         fetchWaitlists();
                         fetchUndoStack();
                     }
@@ -131,4 +133,9 @@ document.addEventListener('DOMContentLoaded', function () {
             undoStackTable.innerHTML = '<tr><td colspan="2">Failed to load undo stack.</td></tr>';
         }
     }
+
+    document.getElementById('sort-books').addEventListener('change', (event) => {
+        const sortBy = event.target.value;
+        fetchBooks(sortBy);
+    });
 });

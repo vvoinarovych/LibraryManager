@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request, render_template
 
-from database.database import Book
 from service.borrowService import borrow_book, return_book, add_book_to_catalog, waitlist, \
     get_all_reversed_history_operations, list_all_books
+from utils.utils import quicksort
 
 routes = Blueprint('routes', __name__)
 
@@ -27,11 +27,17 @@ def return_borrowed_book():
 
 @routes.route('/books/list', methods=['GET'])
 def get_books():
+    sort_by = request.args.get('sort_by', default=None, type=str)
     books = list_all_books()
     if not books:
         return jsonify({"message": "No books found."}), 404
-    return jsonify(books)
 
+    if sort_by == 'title':
+        books = quicksort(books, key_func=lambda x: x['title'].lower())
+    elif sort_by == 'author':
+        books = quicksort(books, key_func=lambda x: x['author'].lower())
+
+    return jsonify(books)
 @routes.route('/books/add', methods=['POST'])
 def add_book():
     data = request.get_json()
