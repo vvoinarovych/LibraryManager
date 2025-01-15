@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+
 class Book(db.Model):
     __tablename__ = 'books'
     id = db.Column(db.Integer, primary_key=True)
@@ -10,11 +11,13 @@ class Book(db.Model):
     published_date = db.Column(db.Date, nullable=True)
     available = db.Column(db.Boolean, default=True)
 
+
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
+
 
 class BorrowRecord(db.Model):
     __tablename__ = 'borrow_records'

@@ -12,7 +12,8 @@ history_stack = HistoryStack()
 
 def add_book_to_catalog(title, author, published_date=None):
     with shared_resource_lock:
-        book = Book(title=title, author=author, published_date=published_date, available=True)
+        book = Book(title=title, author=author,
+                    published_date=published_date, available=True)
         db.session.add(book)
         db.session.commit()
         history_stack.push(("add book", title, author, book.id))
@@ -36,7 +37,8 @@ def borrow_book(user_id, book_id):
         book = Book.query.get(book_id)
 
         if user and book:
-            active_borrow = BorrowRecord.query.filter_by(user_id=user_id, book_id=book_id, return_date=None).first()
+            active_borrow = BorrowRecord.query.filter_by(
+                user_id=user_id, book_id=book_id, return_date=None).first()
             if active_borrow:
                 return f"User {user_id} already has the book '{book.title}' borrowed."
 
@@ -45,7 +47,8 @@ def borrow_book(user_id, book_id):
 
             if book.available:
                 book.available = False
-                db.session.add(BorrowRecord(user_id=user_id, book_id=book_id, borrow_date=date.today()))
+                db.session.add(BorrowRecord(user_id=user_id,
+                               book_id=book_id, borrow_date=date.today()))
                 db.session.commit()
                 history_stack.push(("borrow book", user_id, book_id))
                 return f"Book '{book.title}' borrowed successfully!"
@@ -53,7 +56,8 @@ def borrow_book(user_id, book_id):
                 if book_id not in waitlist:
                     waitlist[book_id] = WaitlistQueue()
                 waitlist[book_id].enqueue(user_id)
-                print(f"User {user_id} added to the waitlist for book {book_id}.")
+                print(
+                    f"User {user_id} added to the waitlist for book {book_id}.")
                 history_stack.push(("add user to waitlist", user_id, book_id))
                 return f"Book '{book.title}' is not available. User {user_id} added to the waitlist."
 
@@ -62,7 +66,8 @@ def borrow_book(user_id, book_id):
 
 def return_book(book_id):
     with shared_resource_lock:
-        borrow = BorrowRecord.query.filter_by(book_id=book_id).filter_by(return_date=None).first()
+        borrow = BorrowRecord.query.filter_by(
+            book_id=book_id).filter_by(return_date=None).first()
         book = Book.query.get(book_id)
 
         if book and borrow:
@@ -71,10 +76,12 @@ def return_book(book_id):
             if book_id in waitlist and not waitlist[book_id].is_empty():
                 next_user_id = waitlist[book_id].dequeue()
 
-                db.session.add(BorrowRecord(user_id=next_user_id, book_id=book_id, borrow_date=date.today()))
+                db.session.add(BorrowRecord(user_id=next_user_id,
+                               book_id=book_id, borrow_date=date.today()))
                 db.session.commit()
 
-                history_stack.push(("return book and assign to waitlist user", borrow.user_id, book_id, next_user_id))
+                history_stack.push(
+                    ("return book and assign to waitlist user", borrow.user_id, book_id, next_user_id))
                 return f"Book '{book.title}' returned and borrowed by user {next_user_id} from the waitlist."
             else:
                 book.available = True

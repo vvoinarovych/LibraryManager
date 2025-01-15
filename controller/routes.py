@@ -6,25 +6,30 @@ from utils.sorting import quicksort
 
 routes = Blueprint('routes', __name__)
 
+
 @routes.route('/')
 def home():
     return render_template('index.html')
+
 
 @routes.route('/books')
 def books():
     return render_template('books.html')
 
+
 @routes.route('/books/borrow', methods=['POST'])
 async def borrow():
-    data =  request.get_json()
+    data = request.get_json()
     result = await asyncio.to_thread(borrow_book, data['user_id'], data['book_id'])
     return jsonify({"message": result})
 
+
 @routes.route('/books/return', methods=['POST'])
 async def return_borrowed_book():
-    data =  request.get_json()
+    data = request.get_json()
     result = await asyncio.to_thread(return_book, data['book_id'])
     return jsonify({"message": result})
+
 
 @routes.route('/books/list', methods=['GET'])
 async def get_books():
@@ -41,13 +46,15 @@ async def get_books():
 
     return jsonify(books)
 
+
 @routes.route('/books/add', methods=['POST'])
 async def add_book():
-    data =  request.get_json()
+    data = request.get_json()
     if 'title' in data and 'author' in data:
         result = await asyncio.to_thread(add_book_to_catalog, data['title'], data['author'], data.get('published_date'))
         return jsonify({"message": result})
     return jsonify({"error": "Invalid data"}), 400
+
 
 @routes.route('/books/waitlist', methods=['GET'])
 async def get_all_waitlists():
@@ -57,6 +64,7 @@ async def get_all_waitlists():
         print(f"Error processing waitlist: {e}")
         return jsonify({"error": "Failed to process waitlist data"}), 500
     return jsonify(all_waitlists)
+
 
 @routes.route('/books/history', methods=['GET'])
 async def get_undo_stack():
