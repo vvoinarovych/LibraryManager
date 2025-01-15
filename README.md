@@ -12,23 +12,7 @@ Library Manager is a project designed to help manage library systems, allowing y
 Follow the steps below to set up the project on your local machine.
 
 
-### 1. Create a Virtual Environment
-
-It is recommended to create a virtual environment to isolate your project dependencies.
-
-- On **macOS/Linux**:
-  ```bash
-  python3 -m venv venv
-  source venv/bin/activate
-  ```
-
-- On **Windows**:
-  ```bash
-  python -m venv venv
-  venv\Scripts\activate
-  ```
-
-### 2. Install Required Libraries
+### 1. Install Required Libraries
 
 Once the virtual environment is activated, install the required libraries by running the following command:
 
@@ -38,11 +22,11 @@ pip install -r requirements.txt
 
 This will install all the dependencies listed in the `requirements.txt` file.
 
-### 3. Set Up Environment Variables
+### 2. Set Up Environment Variables
 
 Some parts of the application require configuration through environment variables (e.g., database connection details). These variables are stored in a `.env` file.
 
-#### 3.1 Create a `.env` File
+#### 2.1 Create a `.env` File
 
 Create a `.env` file in the root directory of the project. The file should contain your database credentials like this:
 
@@ -58,7 +42,7 @@ DB_NAME=library_db
 Make sure to replace the values with your actual database configuration details.
 
 
-### 4. Run the Project
+### 3ю Run the Project
 
 After setting up the environment and installing the required libraries, you can run the project.
 
