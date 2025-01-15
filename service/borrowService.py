@@ -36,6 +36,13 @@ def borrow_book(user_id, book_id):
         book = Book.query.get(book_id)
 
         if user and book:
+            active_borrow = BorrowRecord.query.filter_by(user_id=user_id, book_id=book_id, return_date=None).first()
+            if active_borrow:
+                return f"User {user_id} already has the book '{book.title}' borrowed."
+
+            if book_id in waitlist and user_id in waitlist[book_id].queue:
+                return f"User {user_id} is already in the waitlist for the book '{book.title}'."
+
             if book.available:
                 book.available = False
                 db.session.add(BorrowRecord(user_id=user_id, book_id=book_id, borrow_date=date.today()))
@@ -45,11 +52,11 @@ def borrow_book(user_id, book_id):
             else:
                 if book_id not in waitlist:
                     waitlist[book_id] = WaitlistQueue()
-
                 waitlist[book_id].enqueue(user_id)
                 print(f"User {user_id} added to the waitlist for book {book_id}.")
                 history_stack.push(("add user to waitlist", user_id, book_id))
-                return "Book not available, added to the waitlist."
+                return f"Book '{book.title}' is not available. User {user_id} added to the waitlist."
+
         return "User or book not found."
 
 
@@ -60,10 +67,21 @@ def return_book(book_id):
 
         if book and borrow:
             borrow.return_date = date.today()
-            book.available = True
-            db.session.commit()
-            history_stack.push(("return book", borrow.user_id, book_id))
-            return f"Book '{book.title}' returned successfully!"
+
+            if book_id in waitlist and not waitlist[book_id].is_empty():
+                next_user_id = waitlist[book_id].dequeue()
+
+                db.session.add(BorrowRecord(user_id=next_user_id, book_id=book_id, borrow_date=date.today()))
+                db.session.commit()
+
+                history_stack.push(("return book and assign to waitlist user", borrow.user_id, book_id, next_user_id))
+                return f"Book '{book.title}' returned and borrowed by user {next_user_id} from the waitlist."
+            else:
+                book.available = True
+                db.session.commit()
+                history_stack.push(("return book", borrow.user_id, book_id))
+                return f"Book '{book.title}' returned successfully and is now available."
+
         return "No active borrow record found for this book."
 
 
