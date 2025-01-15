@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request, render_template
 import asyncio
 from service.borrowService import borrow_book, return_book, add_book_to_catalog, waitlist, \
     get_all_reversed_history_operations, list_all_books
-from utils.utils import quicksort
+from utils.sorting import quicksort
 
 routes = Blueprint('routes', __name__)
 
