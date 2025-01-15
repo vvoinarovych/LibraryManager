@@ -42,7 +42,7 @@ DB_NAME=library_db
 Make sure to replace the values with your actual database configuration details.
 
 
-### 3ю Run the Project
+### 3. Run the Project
 
 After setting up the environment and installing the required libraries, you can run the project.
 
