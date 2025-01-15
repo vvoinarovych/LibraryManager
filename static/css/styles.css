@@ -1,3 +1,4 @@
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -21,18 +22,209 @@ main {
     padding: 2rem;
 }
 
+h2 {
+    color: #333;
+}
+
+/* Form Styles */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+form label {
+    font-size: 1.2rem;
+}
+
+form input {
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+form button {
+    padding: 0.8rem;
+    font-size: 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #45a049;
+}
+
+/* Table Styles */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 1rem;
+    margin-top: 2rem;
+    background-color: #f9f9f9;
 }
 
 table th, table td {
+    padding: 0.8rem;
     border: 1px solid #ddd;
-    padding: 0.5rem;
     text-align: left;
 }
 
 table th {
     background-color: #f4f4f4;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* User Management Specific Styles */
+#users-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+#users-table th, #users-table td {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+#users-table th {
+    background-color: #f4f4f4;
+}
+
+#users-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+button.delete-user-btn {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.delete-user-btn:hover {
+    background-color: #e53935;
+}
+
+/* Books Catalog Specific Styles */
+#books-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+#books-table th, #books-table td {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+#books-table th {
+    background-color: #f4f4f4;
+}
+
+#books-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+button.borrow-btn {
+    padding: 0.5rem 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.borrow-btn:hover {
+    background-color: #45a049;
+}
+
+button.return-btn {
+    padding: 0.5rem 1rem;
+    background-color: #FF9800;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.return-btn:hover {
+    background-color: #fb8c00;
+}
+
+/* Waitlist Styles */
+#waitlist-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+#waitlist-table th, #waitlist-table td {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+#waitlist-table th {
+    background-color: #f4f4f4;
+}
+
+#waitlist-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* History (Undo Stack) Styles */
+#undo-stack-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+#undo-stack-table th, #undo-stack-table td {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+#undo-stack-table th {
+    background-color: #f4f4f4;
+}
+
+#undo-stack-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    form {
+        padding: 1rem;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+
+    header {
+        padding: 0.8rem;
+    }
+
+    main {
+        padding: 1rem;
+    }
 }

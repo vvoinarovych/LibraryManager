@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>User Management</h2>
+
+    <div>
+        <h3>Add User</h3>
+        <form id="add-user-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required>
+            <button type="submit">Add User</button>
+        </form>
+
+    </div>
+
+    <div>
+        <h3>Users List</h3>
+        <table id="users-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan="4">Loading...</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

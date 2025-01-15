@@ -1,8 +1,10 @@
 from sqlalchemy import inspect
 from flask import Flask
+
+from controller.user_routes import user_routes
 from database.database import db
 from database.config import SQLALCHEMY_DATABASE_URI
-from controller.routes import routes
+from controller.borrow_routes import borrow_routes
 from database.database import Book, User, BorrowRecord
 from datetime import date
 
@@ -10,7 +12,8 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
-app.register_blueprint(routes)
+app.register_blueprint(borrow_routes)
+app.register_blueprint(user_routes)
 
 
 def init_db():
